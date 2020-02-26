@@ -1,4 +1,4 @@
-# args-flagify
+# m-npmrc
 
 > Manage multiple .npmrc configurations
 
