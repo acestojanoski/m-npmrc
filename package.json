@@ -1,0 +1,41 @@
+{
+  "name": "m-npmrc",
+  "version": "1.0.0",
+  "description": "Manage multiple .npmrc configurations",
+  "main": "cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aleksandar Stojanoski",
+  "license": "MIT",
+  "homepage": "https://github.com/acestojanoski/m-npmrc#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acestojanoski/m-npmrc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/acestojanoski/m-npmrc/issues"
+  },
+  "dependencies": {
+    "args-flagify": "^1.0.0",
+    "inquirer": "^7.0.4"
+  },
+  "keywords": [
+    "npmrc",
+    "node",
+    "npm",
+    "cli",
+    "manager",
+    "m-npmrc",
+    "npmrc-manager"
+  ],
+  "devDependencies": {
+    "xo": "^0.27.2"
+  },
+  "xo": {
+    "prettier": true,
+    "rules": {
+      "no-unused-vars": "warn"
+    }
+  }
+}
