@@ -21,6 +21,7 @@ Commands
   use (use an existing npmrc configuration)
   list (list your npmrc configurations)
   remove (remove an existing npmrc configuration)
+  edit (edit an existing npmrc configuration)
 
 Flags
   --version (display the m-npmrc version)
@@ -31,6 +32,7 @@ Examples
   $ m-npmrc use
   $ m-npmrc list
   $ m-npmrc remove
+  $ m-npmrc edit
 ```
 
 ## LICENSE

@@ -12,9 +12,11 @@ const writeFileAsync = promisify(fs.writeFile);
 const readdirAsync = promisify(fs.readdir);
 const unlinkAsync = promisify(fs.unlink);
 const copyFileAsync = promisify(fs.copyFile);
+const readFileAsync = promisify(fs.readFile);
 
-const homeDirectory = os.homedir();
-const configurationsDirectory = path.join(os.tmpdir(), 'm-npmrc');
+const homeDirectoryPath = os.homedir();
+const npmrcPath = path.join(homeDirectoryPath, '.npmrc');
+const configurationsDirectoryPath = path.join(homeDirectoryPath, '.m-npmrc');
 
 const cli = argsFlagify(`
 	Usage
@@ -25,6 +27,7 @@ const cli = argsFlagify(`
 	  use (use an existing npmrc configuration)
 	  list (list your npmrc configurations)
 	  remove (remove an existing npmrc configuration)
+	  edit (edit an existing npmrc configuration)
 
 	Flags
 	  --version (display the m-npmrc version)
@@ -35,33 +38,34 @@ const cli = argsFlagify(`
 	  $ m-npmrc use
 	  $ m-npmrc list
 	  $ m-npmrc remove
+	  $ m-npmrc edit
 `);
 
-if (!fs.existsSync(configurationsDirectory)) {
-	fs.mkdirSync(configurationsDirectory);
+if (!fs.existsSync(configurationsDirectoryPath)) {
+	fs.mkdirSync(configurationsDirectoryPath);
 }
 
 const executeNew = async () => {
-	const questions = [
+	const {configurationName} = await inquirer.prompt([
 		{
 			type: 'text',
 			name: 'configurationName',
 			message: 'Enter a name for your npmrc configuration:',
 		},
+	]);
+
+	const {newConfiguration} = await inquirer.prompt([
 		{
 			type: 'editor',
 			name: 'newConfiguration',
 			message: 'Write your configuration:',
+			default: `# ${configurationName}`,
 		},
-	];
-
-	const {configurationName, newConfiguration} = await inquirer.prompt(
-		questions
-	);
+	]);
 
 	try {
 		const configurationPath = path.join(
-			configurationsDirectory,
+			configurationsDirectoryPath,
 			configurationName
 		);
 
@@ -76,7 +80,9 @@ const executeNew = async () => {
 
 const executeList = async () => {
 	try {
-		const configurationNames = await readdirAsync(configurationsDirectory);
+		const configurationNames = await readdirAsync(
+			configurationsDirectoryPath
+		);
 		configurationNames.forEach(configurationName =>
 			console.log(configurationName)
 		);
@@ -89,27 +95,27 @@ const executeList = async () => {
 
 const executeRemove = async () => {
 	try {
-		const choices = await readdirAsync(configurationsDirectory);
+		const choices = await readdirAsync(configurationsDirectoryPath);
 
 		if (choices.length === 0) {
 			console.log('No configurations to remove.');
 			process.exit();
 		}
 
-		const questions = [
+		const {configurationToRemove} = await inquirer.prompt([
 			{
 				type: 'list',
 				name: 'configurationToRemove',
 				message: 'Remove a configuration:',
 				choices,
 			},
-		];
+		]);
 
-		const inputs = await inquirer.prompt(questions);
 		const configurationPath = path.join(
-			configurationsDirectory,
-			inputs.configurationToRemove
+			configurationsDirectoryPath,
+			configurationToRemove
 		);
+
 		await unlinkAsync(configurationPath);
 		console.log('Configuration removed successfully.');
 	} catch (error) {
@@ -121,33 +127,82 @@ const executeRemove = async () => {
 
 const executeUse = async () => {
 	try {
-		const choices = await readdirAsync(configurationsDirectory);
+		const choices = await readdirAsync(configurationsDirectoryPath);
 
 		if (choices.length === 0) {
 			console.log('No configurations to use.');
 			process.exit();
 		}
 
-		const questions = [
+		const {configurationToUse} = await inquirer.prompt([
 			{
 				type: 'list',
 				name: 'configurationToUse',
 				message: 'Use a configuration:',
 				choices,
 			},
-		];
+		]);
 
-		const inputs = await inquirer.prompt(questions);
-		const sourcepath = path.join(
-			configurationsDirectory,
-			inputs.configurationToUse
+		const configurationPath = path.join(
+			configurationsDirectoryPath,
+			configurationToUse
 		);
-		const destinationPath = path.join(homeDirectory, '.npmrc');
-		await copyFileAsync(sourcepath, destinationPath);
-		console.log(`Using configuration: ${inputs.configurationToUse}`);
+
+		await copyFileAsync(configurationPath, npmrcPath);
+		console.log(`Using configuration: ${configurationToUse}`);
 	} catch (error) {
 		console.error(
 			'An error occurred while switching the configuration. Please try again.'
+		);
+	}
+};
+
+const executeEdit = async () => {
+	try {
+		const choices = await readdirAsync(configurationsDirectoryPath);
+
+		if (choices.length === 0) {
+			console.log('No configurations to use.');
+			process.exit();
+		}
+
+		const {configurationToEdit} = await inquirer.prompt([
+			{
+				type: 'list',
+				name: 'configurationToEdit',
+				message: 'Edit a configuration:',
+				choices,
+			},
+		]);
+
+		const configurationPath = path.join(
+			configurationsDirectoryPath,
+			configurationToEdit
+		);
+
+		const oldConfiguration = await readFileAsync(configurationPath);
+
+		const {editedConfiguration} = await inquirer.prompt([
+			{
+				type: 'editor',
+				name: 'editedConfiguration',
+				message: 'Edit',
+				default: oldConfiguration,
+			},
+		]);
+
+		await writeFileAsync(configurationPath, editedConfiguration);
+
+		const npmrc = await readFileAsync(npmrcPath);
+
+		if (Buffer.compare(npmrc, oldConfiguration) === 0) {
+			await copyFileAsync(configurationPath, npmrcPath);
+		}
+
+		console.log('Configuration edited successfully.');
+	} catch (error) {
+		console.error(
+			'An error occurred while editing the configuration. Please try again.'
 		);
 	}
 };
@@ -169,6 +224,10 @@ switch (command) {
 
 	case 'remove':
 		executeRemove();
+		break;
+
+	case 'edit':
+		executeEdit();
 		break;
 
 	default:

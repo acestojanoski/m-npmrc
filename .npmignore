@@ -108,4 +108,4 @@ dist
 
 # custom
 .vscode/
-.prettierc
+.prettierrc
