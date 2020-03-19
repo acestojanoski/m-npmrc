@@ -162,7 +162,7 @@ const executeEdit = async () => {
 		const choices = await readdirAsync(configurationsDirectoryPath);
 
 		if (choices.length === 0) {
-			console.log('No configurations to use.');
+			console.log('No configurations to edit.');
 			process.exit();
 		}
 
