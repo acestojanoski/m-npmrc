@@ -109,3 +109,4 @@ dist
 # custom
 .vscode/
 .prettierrc
+.circleci/
