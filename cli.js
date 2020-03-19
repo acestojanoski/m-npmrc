@@ -19,21 +19,21 @@ const npmrcPath = path.join(homeDirectoryPath, '.npmrc');
 const configurationsDirectoryPath = path.join(homeDirectoryPath, '.m-npmrc');
 
 const cli = argsFlagify(`
-	Usage
+	Usage:
 	  $ m-npmrc <input>
 
-	Commands
-	  new (create a new npmrc configuration)
-	  use (use an existing npmrc configuration)
-	  list (list your npmrc configurations)
-	  remove (remove an existing npmrc configuration)
-	  edit (edit an existing npmrc configuration)
+	Commands:
+	  new - create a new npmrc configuration
+	  use - use an existing npmrc configuration
+	  list - list your npmrc configurations
+	  remove - remove an existing npmrc configuration
+	  edit - edit an existing npmrc configuration
 
-	Flags
-	  --version (display the m-npmrc version)
-	  --help (display the help text)
+	Options:
+	  --version - display the m-npmrc version
+	  --help - display the help text
 
-	Examples
+	Examples:
 	  $ m-npmrc new
 	  $ m-npmrc use
 	  $ m-npmrc list
