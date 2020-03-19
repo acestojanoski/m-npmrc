@@ -10,7 +10,7 @@
 		"xo": "xo"
 	},
 	"engines": {
-		"node": ">=8"
+		"node": ">=8.5.0"
 	},
 	"author": {
 		"name": "Aleksandar Stojanoski",
