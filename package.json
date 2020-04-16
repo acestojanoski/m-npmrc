@@ -26,7 +26,7 @@
 		"url": "https://github.com/acestojanoski/m-npmrc/issues"
 	},
 	"dependencies": {
-		"args-flagify": "^2.0.0",
+		"args-flagify": "^2.2.0",
 		"inquirer": "^7.0.4"
 	},
 	"keywords": [
