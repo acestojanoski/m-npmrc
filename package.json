@@ -2,16 +2,17 @@
 	"name": "m-npmrc",
 	"version": "2.0.5",
 	"description": "Manage multiple .npmrc configurations",
-	"main": "cli.js",
-	"bin": {
-		"m-npmrc": "cli.js"
-	},
+	"bin": "dist/cli.js",
 	"scripts": {
-		"xo": "xo"
+		"build": "tsc",
+		"test": "xo"
 	},
 	"engines": {
-		"node": ">=8.5.0"
+		"node": ">=10"
 	},
+	"files": [
+		"dist/cli.js"
+	],
 	"author": {
 		"name": "Aleksandar Stojanoski",
 		"email": "aleksandar-stojanoski@hotmail.com"
@@ -25,10 +26,6 @@
 	"bugs": {
 		"url": "https://github.com/acestojanoski/m-npmrc/issues"
 	},
-	"dependencies": {
-		"args-flagify": "^2.2.0",
-		"inquirer": "^7.0.4"
-	},
 	"keywords": [
 		"npmrc",
 		"node",
@@ -36,15 +33,24 @@
 		"cli",
 		"manager",
 		"m-npmrc",
-		"npmrc-manager"
+		"npmrc-manager",
+		"config"
 	],
+	"dependencies": {
+		"chalk": "^4.1.0",
+		"inquirer": "^7.0.4",
+		"meow": "^8.0.0"
+	},
 	"devDependencies": {
-		"xo": "^0.27.2"
+		"@types/inquirer": "^7.3.1",
+		"typescript": "^4.1.2",
+		"xo": "^0.35.0"
 	},
 	"xo": {
 		"prettier": true,
 		"rules": {
-			"no-unused-vars": "warn"
+			"capitalized-comments": "off",
+			"unicorn/no-process-exit": "off"
 		}
 	}
 }
