@@ -1,6 +1,6 @@
 {
 	"name": "m-npmrc",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "Manage multiple .npmrc configurations",
 	"bin": "dist/cli.js",
 	"scripts": {
