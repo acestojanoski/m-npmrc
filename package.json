@@ -5,7 +5,7 @@
 	"bin": "dist/cli.js",
 	"scripts": {
 		"build": "tsc",
-		"test": "xo"
+		"xo": "xo"
 	},
 	"engines": {
 		"node": ">=10"
