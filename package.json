@@ -6,7 +6,7 @@
 	"scripts": {
 		"build": "tsc",
 		"xo": "xo",
-		"prepublishOnly": "npm run build"
+		"prepublishOnly": "yarn build"
 	},
 	"engines": {
 		"node": ">=10"
